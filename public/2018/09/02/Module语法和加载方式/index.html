@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Module语法和加载方式 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="背景Javascript 没有模块的(module)体系，ES6前主要是CommonJs(用于服务器端)、AMD(用于浏览器) ES6 的加载方式：编译时加载/静态加载（即在编译时就完成模块加载），效率自然是比CommonJs（运行时加载）高。 ES61.import命令具有提升效果； 2.由于import是静态执行，所以不能使用变量和表达式（这种智能在运行时得到结果的语法结构） 12// 报错i">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Module语法和加载方式">
+<meta property="og:url" content="http://yoursite.com/2018/09/02/Module语法和加载方式/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="背景Javascript 没有模块的(module)体系，ES6前主要是CommonJs(用于服务器端)、AMD(用于浏览器) ES6 的加载方式：编译时加载/静态加载（即在编译时就完成模块加载），效率自然是比CommonJs（运行时加载）高。 ES61.import命令具有提升效果； 2.由于import是静态执行，所以不能使用变量和表达式（这种智能在运行时得到结果的语法结构） 12// 报错i">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-09-04T02:09:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Module语法和加载方式">
+<meta name="twitter:description" content="背景Javascript 没有模块的(module)体系，ES6前主要是CommonJs(用于服务器端)、AMD(用于浏览器) ES6 的加载方式：编译时加载/静态加载（即在编译时就完成模块加载），效率自然是比CommonJs（运行时加载）高。 ES61.import命令具有提升效果； 2.由于import是静态执行，所以不能使用变量和表达式（这种智能在运行时得到结果的语法结构） 12// 报错i">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Module语法和加载方式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/02/Module语法和加载方式/" class="article-date">
+  <time datetime="2018-09-02T15:18:56.000Z" itemprop="datePublished">2018-09-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Module语法和加载方式
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>Javascript 没有模块的(module)体系，ES6前主要是CommonJs(用于服务器端)、AMD(用于浏览器)</p>
+<p>ES6 的加载方式：编译时加载/静态加载（即在编译时就完成模块加载），效率自然是比CommonJs（运行时加载）高。</p>
+<h1 id="ES6"><a href="#ES6" class="headerlink" title="ES6"></a>ES6</h1><p>1.import命令具有提升效果；</p>
+<p>2.由于import是静态执行，所以不能使用变量和表达式（这种智能在运行时得到结果的语法结构）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// 报错</span><br><span class="line">import &#123;&apos;f&apos;+&apos;oo&apos;&#125; from &apos;my_module;</span><br></pre></td></tr></table></figure>
+<p>3.import 语句会执行所加载的模块，但不会输入任何值，并且不会加载多次</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import(&apos;../a.js),import()函数功能类似于Node的require 方法，区别在于：前者是异步加载，后者是同步加载</span><br></pre></td></tr></table></figure>
+<h1 id="Module-的加载方式"><a href="#Module-的加载方式" class="headerlink" title="Module 的加载方式"></a>Module 的加载方式</h1><p>1.浏览器加载js文件会阻塞线程，所以允许异步加载的方式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src=&apos;./myModule.js&apos; defer&gt;&lt;/script&gt;</span><br><span class="line">&lt;script src=&apos;./myModule.js&apos; async&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p><strong>区别：</strong>defer 会等到整个页面正常渲染完成后执行；而async 一旦下载完成，渲染引擎终止，执行脚本后继续渲染。</p>
+<p>加载es6 模块，也可用\&lt;script>标签，但是要加type=”module”属性。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src=&apos;./myModule.js&apos; type=&quot;module&quot;&gt;&lt;/script&gt;</span><br><span class="line">&lt;!-- 等同于 --&gt;</span><br><span class="line">&lt;script src=&apos;./myModule.js&apos; defer&gt;&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;script src=&apos;./myModule.js&apos; type=&quot;module&quot; async&gt;&lt;/script&gt;</span><br><span class="line">&lt;!-- 等同于 --&gt;</span><br><span class="line">&lt;script src=&apos;./myModule.js&apos; async&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>2.ES6 模块和CommonJs模块的差异</p>
+<ul>
+<li>CommonJs 模块输出的是值的复制；ES6模块输出的是值的引用</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- CommonJS lib.js --&gt;</span><br><span class="line">var counter = 3;</span><br><span class="line">function inCounter()&#123;</span><br><span class="line">	counter++;</span><br><span class="line">&#125;</span><br><span class="line">module.exports=&#123;</span><br><span class="line">	counter: counter,</span><br><span class="line">	inCounter: inCounter</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&lt;!-- CommonJS main.js --&gt;</span><br><span class="line">var mod = require(&apos;./lib&apos;);</span><br><span class="line">mod.counter // 3</span><br><span class="line">mode.inCouter();</span><br><span class="line">mod.counter //3</span><br><span class="line"></span><br><span class="line">&lt;!-- ES6 lib.js --&gt;</span><br><span class="line">export let counter = 3;</span><br><span class="line">export function inCounter()&#123;</span><br><span class="line">	counter++;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&lt;!-- ES6 main.js --&gt;</span><br><span class="line">import &#123;counter, inCounter&#125; from &apos;./lib&apos;;</span><br><span class="line">counter //3</span><br><span class="line">inCounter();</span><br><span class="line">counter //4</span><br></pre></td></tr></table></figure>
+<p>ES6 模块的运行机制和CommonJs不同。ES6模块中JS引擎对脚本静态分析是，遇到模块加载命令（import）就会生成一个只读引用，等脚本真正运行了才会根据引用到被加载的模块中取值。<br><strong>所以ES6模块是动态引用，没有缓存</strong></p>
+<p>注：地址是只读的，不能重新赋值</p>
+<ul>
+<li>CommonJS 模块是运行时加载，ES6模块是编译时输出接口</li>
+</ul>
+<h1 id="Node-加载"><a href="#Node-加载" class="headerlink" title="Node 加载"></a>Node 加载</h1><ol>
+<li>Node 有自己的CommonJS 模块格式，与ES6 模块格式不兼容，目前的解决方案是将两者分开，采用各自的加载方案。静态分析阶段，脚本只要有一行import 或 export 语句，Node就会认为是ES6模块；</li>
+</ol>
+<h2 id="CommonJs模块和ES6模块互相加载"><a href="#CommonJs模块和ES6模块互相加载" class="headerlink" title="CommonJs模块和ES6模块互相加载"></a>CommonJs模块和ES6模块互相加载</h2><ul>
+<li>import 命令加载CommonJS 模块<br>步骤一： module.exports 等同于 export.default</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">// a.js</span><br><span class="line">module.exports=&#123;</span><br><span class="line">	foo:&apos;hello&apos;,</span><br><span class="line">	bar:&apos;world&apos;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&lt;!-- 等同于 --&gt;</span><br><span class="line">export.default=&#123;</span><br><span class="line">	foo:&apos;hello&apos;,</span><br><span class="line">	bar:&apos;world&apos;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//引用</span><br><span class="line">&lt;!-- 写法一 --&gt;</span><br><span class="line">import baz from &apos;./a&apos;</span><br><span class="line">&lt;!-- 写法二 --&gt;</span><br><span class="line">import &#123;default as baz&#125; from &apos;./a&apos;</span><br><span class="line">// 上面两种写法</span><br><span class="line">//baz=&#123;foo:&apos;hello&apos;,bar:&apos;world&apos;&#125;</span><br><span class="line">&lt;!-- 写法三 --&gt;</span><br><span class="line">import * as baz from &apos;./a&apos;</span><br><span class="line">// baz=&#123;</span><br><span class="line">//	get default()&#123;return module.exports;&#125;</span><br><span class="line">//	get foo()&#123; return this.default.foo &#125;.bind(baz);</span><br><span class="line">//	get bar()&#123; return this.default.bar &#125;.bind(baz);</span><br><span class="line">//&#125;</span><br></pre></td></tr></table></figure>
+<p>步骤二：ES6模块是在编译时确定输出接口，CommonJS模块是在运行时才确定输出接口，所以一下写法❌</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import &#123;readfile&#125; from &apos;fs&apos;;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>require 命令加载ES6<br>ES6 模块的所有输出接口都会成为输出对象的属性</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// es.js</span><br><span class="line">let foo = &#123;bar:&apos;my-default&apos;&#125;;</span><br><span class="line">export default foo;</span><br><span class="line">foo=null;</span><br><span class="line"></span><br><span class="line">// commonJs.js</span><br><span class="line">const es_namespace = require(&apos;./es&apos;);</span><br><span class="line">es_namespace.deault // &#123;bar:&apos;my-default&apos;&#125;</span><br></pre></td></tr></table></figure>
+<p>注：es.js 对foo重新赋值没有在模块外反应出来，原因就是CommonJS加载的缓存</p>
+<hr>
+<h2 id="实际的应用"><a href="#实际的应用" class="headerlink" title="实际的应用"></a>实际的应用</h2><p>1.单页按需加载</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">const listRoutes = [</span><br><span class="line">    &#123;</span><br><span class="line">        path: &apos;list/:pageName&apos;,</span><br><span class="line">        getComponent: (location, cb) =&gt; &#123;</span><br><span class="line">            require.ensure([], (require) =&gt; &#123;</span><br><span class="line">                cb(null, require(&apos;components/List/ListContainer&apos;).default);</span><br><span class="line">            &#125;, &apos;list&apos;);</span><br><span class="line">        &#125;,</span><br><span class="line">        onEnter: (&#123; params &#125;) =&gt; &#123;</span><br><span class="line">            pageEnter(&#123; ...params, pageType: &apos;list&apos; &#125;);</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+<p>2.Koa 项目中模块引用</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/09/02/Module语法和加载方式/" data-id="cjlt97c7e0000mr6yf8zr8v2r" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/09/02/My-First-Post/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">My First Post</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/09/02/Module语法和加载方式/">Module语法和加载方式</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/02/My-First-Post/">My First Post</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/29/hello-world/">Hello World</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
