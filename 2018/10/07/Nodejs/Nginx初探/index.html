@@ -5,16 +5,19 @@
   
 
   
-  <title>My First Post | Hexo</title>
+  <title>Nginx初探 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="article">
-<meta property="og:title" content="My First Post">
-<meta property="og:url" content="http://yoursite.com/2018/09/02/My-First-Post/index.html">
+  <meta name="description" content="##正向代理 vs 反向代理 所谓“正反向” 指的是代理的是客户端(正向)还是服务端(反向)。————————————————————————————————————正向代理：典型的例子就是代理器，它会把访问墙外服务器server的网页请求，代理到一个可以访问该网站的代理服务器proxy，这个代理服务器proxy把墙外服务器server上的网页内容获取，再转发给客户。 反向代理：客户端发送的请求，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nginx初探">
+<meta property="og:url" content="http://yoursite.com/2018/10/07/Nodejs/Nginx初探/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="##正向代理 vs 反向代理 所谓“正反向” 指的是代理的是客户端(正向)还是服务端(反向)。————————————————————————————————————正向代理：典型的例子就是代理器，它会把访问墙外服务器server的网页请求，代理到一个可以访问该网站的代理服务器proxy，这个代理服务器proxy把墙外服务器server上的网页内容获取，再转发给客户。 反向代理：客户端发送的请求，">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-09-02T07:20:34.000Z">
+<meta property="og:updated_time" content="2018-10-07T12:42:21.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="My First Post">
+<meta name="twitter:title" content="Nginx初探">
+<meta name="twitter:description" content="##正向代理 vs 反向代理 所谓“正反向” 指的是代理的是客户端(正向)还是服务端(反向)。————————————————————————————————————正向代理：典型的例子就是代理器，它会把访问墙外服务器server的网页请求，代理到一个可以访问该网站的代理服务器proxy，这个代理服务器proxy把墙外服务器server上的网页内容获取，再转发给客户。 反向代理：客户端发送的请求，">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -61,10 +64,10 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-My-First-Post" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-Nodejs/Nginx初探" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2018/09/02/My-First-Post/" class="article-date">
-  <time datetime="2018-09-02T07:20:34.000Z" itemprop="datePublished">2018-09-02</time>
+    <a href="/2018/10/07/Nodejs/Nginx初探/" class="article-date">
+  <time datetime="2018-10-07T12:22:30.000Z" itemprop="datePublished">2018-10-07</time>
 </a>
     
   </div>
@@ -75,7 +78,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      My First Post
+      Nginx初探
     </h1>
   
 
@@ -83,11 +86,16 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <p>##正向代理 vs 反向代理</p>
+<p>所谓“正反向” 指的是代理的是客户端(正向)还是服务端(反向)。<br>————————————————————————————————————<br>正向代理：典型的例子就是代理器，它会把访问墙外服务器server的网页请求，代理到一个可以访问该网站的代理服务器proxy，这个代理服务器proxy把墙外服务器server上的网页内容获取，再转发给客户。</p>
+<p>反向代理：客户端发送的请求，想要访问server服务器上的内容。但将被发送到一个代理服务器proxy，这个代理服务器将把请求代理到和自己属于同一个LAN下的内部服务器上，而用户真正想获得的内容就储存在这些内部服务器上。</p>
+<p>反向代理的优势：1）安全及权限；2）负载均衡。</p>
+<p><a href="https://juejin.im/post/5bacbd395188255c8d0fd4b2?utm_source=gold_browser_extension" target="_blank" rel="noopener">https://juejin.im/post/5bacbd395188255c8d0fd4b2?utm_source=gold_browser_extension</a></p>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/02/My-First-Post/" data-id="cjn78fs3l00019c6yt67hc68k" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/07/Nodejs/Nginx初探/" data-id="cjn78fs4e00039c6yq2s30jep" class="article-share-link">Share</a>
       
       
     </footer>
@@ -96,19 +104,19 @@
     
 <nav id="article-nav">
   
-    <a href="/2018/09/02/Module语法和加载方式/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2018/10/13/Nodejs/预渲染/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          Module语法和加载方式
+          预渲染
         
       </div>
     </a>
   
   
-    <a href="/2018/08/29/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2018/09/23/Nodejs/index/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Hello World</div>
+      <div class="article-nav-title">网络编程</div>
     </a>
   
 </nav>

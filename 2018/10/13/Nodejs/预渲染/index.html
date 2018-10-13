@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>预渲染 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="React 和 Vue 框架的开发思想真正做到了前后端分离，并且其中单页应用给用户带来了更好的体验。不过其HTML in JS  的思路在首屏加载慢、白屏以及SEO等问题中日益突出。 目前主流处理首屏加载慢的解决方案：1. Server-Side Rendering(SSR) ；2. Prerendering SSR 的应用需要考虑在服务端 Node.js 环境中的内存泄露、运行速度、并发压力等问">
+<meta property="og:type" content="article">
+<meta property="og:title" content="预渲染">
+<meta property="og:url" content="http://yoursite.com/2018/10/13/Nodejs/预渲染/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="React 和 Vue 框架的开发思想真正做到了前后端分离，并且其中单页应用给用户带来了更好的体验。不过其HTML in JS  的思路在首屏加载慢、白屏以及SEO等问题中日益突出。 目前主流处理首屏加载慢的解决方案：1. Server-Side Rendering(SSR) ；2. Prerendering SSR 的应用需要考虑在服务端 Node.js 环境中的内存泄露、运行速度、并发压力等问">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-10-13T09:19:14.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="预渲染">
+<meta name="twitter:description" content="React 和 Vue 框架的开发思想真正做到了前后端分离，并且其中单页应用给用户带来了更好的体验。不过其HTML in JS  的思路在首屏加载慢、白屏以及SEO等问题中日益突出。 目前主流处理首屏加载慢的解决方案：1. Server-Side Rendering(SSR) ；2. Prerendering SSR 的应用需要考虑在服务端 Node.js 环境中的内存泄露、运行速度、并发压力等问">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Nodejs/预渲染" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/10/13/Nodejs/预渲染/" class="article-date">
+  <time datetime="2018-10-13T09:10:35.000Z" itemprop="datePublished">2018-10-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      预渲染
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>React 和 Vue 框架的开发思想真正做到了前后端分离，并且其中单页应用给用户带来了更好的体验。不过其HTML in JS  的思路在首屏加载慢、白屏以及SEO等问题中日益突出。</p>
+<p>目前主流处理首屏加载慢的解决方案：1. Server-Side Rendering(SSR) ；2. Prerendering</p>
+<p>SSR 的应用需要考虑在服务端 Node.js 环境中的内存泄露、运行速度、并发压力等问题… 所以如果对一些项目已经比较稳定、且迭代幅度不大的项目并不适合采用服务器端渲染的方式。</p>
+<p>此外本文主要介绍Prerendering，之后会单独介绍SSR ✌️</p>
+<p>Prerendering</p>
+<p>整体思路：</p>
+<pre><code>利用 Webpack 的第三方插件prerender-spa-plugin，在编译应用的过程中在特定的时间(或事件节点)生成静态页面，建立对应的索引路径。
+</code></pre><p>使用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">const PrerenderSPAPlugin = require(&apos;prerender-spa-plugin&apos;);</span><br><span class="line">const Renderer = PrerenderSPAPlugin.PuppeteerRenderer;</span><br><span class="line"></span><br><span class="line">module.exports = &#123;</span><br><span class="line">    plugins: [</span><br><span class="line">        new PrerenderSPAPlugin(&#123;</span><br><span class="line">            staticDir: path.join(__dirname, &apos;dist&apos;),</span><br><span class="line">            routes: [ &apos;/&apos;, &apos;/about&apos;, &apos;/contact&apos; ],</span><br><span class="line">            renderer: </span><br><span class="line">                new Renderer(&#123;</span><br><span class="line">                    inject: &#123;</span><br><span class="line">                        foo: &apos;bar&apos;</span><br><span class="line">                    &#125;,</span><br><span class="line">                    renderAfterDocumentEvent: &apos;render-event&apos;</span><br><span class="line">                &#125;)</span><br><span class="line">            &#125;)</span><br><span class="line">        ])</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>staticDir: 预渲染输出页面地址</p>
+</li>
+<li><p>routes：需要预渲染的路由地址</p>
+</li>
+<li><p>renderer：采用的渲染引擎是什么，目前v3.4.0支持 Puppeteer Renderer</p>
+<p>  a. inject:预渲染过程中能获取到的值 ==<strong>[Important]</strong>==<br>  [注：使用方法]</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">showMessage()&#123;</span><br><span class="line">    if(window.__PRERENDER_INJECTED &amp;&amp; window.__PRERENDER_INJECTED.foo     ==&apos;bar&apos;)     return;</span><br><span class="line">    this.message = &apos;我是测试预加载拦截&apos;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<pre><code>b.renderAfterDocumentEvent: 监听document.dispatchEvent 事件，决定什么时候开始渲染
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">document.dispatchEvent(new Event(&apos;render-event&apos;))</span><br></pre></td></tr></table></figure>
+</code></pre><p>实践过程</p>
+<p>因为日常的项目开发主要是基于React 框架，且没有介入Node 层，所以为了优化首屏渲染慢的问题，采用了Prerendering 预渲染的方法。下面总结下在项目应用中存在的问题</p>
+<p>1.虽然预渲染生成了初始的页面结构，避免了首屏中js的加载运行时间带来的白屏时间长的问题。但是在react-redux 中渲染中状态树的存储导致了二次渲染的问题</p>
+<p>问题描述：预渲染中最终渲染的页面其状态树并没有保存，导致js文件执行后其状态树初始下为空，页面白屏重新渲染。</p>
+<p>解决思路：</p>
+<ol>
+<li><p>将预渲染最终截取阶段的 redux 树上的状态挂载在 window__INIT_STATE__ 上；</p>
+<p>【两个问题：如何获取redux 的所有状态数；什么时机触发 window.<strong>INIT_STATE</strong>的更新】</p>
+</li>
+<li>通过中间件的方式在预渲染中没触发action 就重新挂载 window.<strong>INIT_STATE</strong>；</li>
+<li>在浏览器端重新执行js时，将window.<strong>INIT_STATE</strong> 作为initalState 挂载到redux中</li>
+</ol>
+<p>具体实现：</p>
+<ul>
+<li>中间件：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">export default (store) =&gt; (next) =&gt; (action) =&gt; &#123;</span><br><span class="line">    console.log(`==========$&#123;store.getState()&#125;============`);</span><br><span class="line">    next(action);</span><br><span class="line">    window.INIT_DATA = store.getState();</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>redux 挂载</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">const store = createStore(combineReducers(reducers), window.INIT_DATA, compose(</span><br><span class="line">    applyMiddleware(thunk, routing),</span><br></pre></td></tr></table></figure>
+<ul>
+<li>触发prerendering时机</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">const fragment = document.createDocumentFragment();</span><br><span class="line">const scriptNode = document.createElement(&apos;script&apos;);</span><br><span class="line">scriptNode.type = &apos;text/javascript&apos;;</span><br><span class="line">scriptNode.text = `window.INIT_DATA = $&#123;JSON.stringify(this.props)&#125;`;</span><br><span class="line">scriptNode.text = `window.INIT_DATA = $&#123;JSON.stringify(window.INIT_DATA || &apos;&#123;&#125;&apos;)&#125;`;</span><br><span class="line">fragment.appendChild(scriptNode);</span><br><span class="line">document.getElementsByTagName(&apos;head&apos;)[0].appendChild(fragment);</span><br><span class="line">document.dispatchEvent(new Event(&apos;custom-render-trigger&apos;));</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/10/13/Nodejs/预渲染/" data-id="cjn78fs4j00059c6yrslwxfq2" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/10/07/Nodejs/Nginx初探/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Nginx初探</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/10/13/Nodejs/预渲染/">预渲染</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/07/Nodejs/Nginx初探/">Nginx初探</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/23/Nodejs/index/">网络编程</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/02/Module语法和加载方式/">Module语法和加载方式</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/02/My-First-Post/">My First Post</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
