@@ -118,17 +118,23 @@
 <li>在浏览器端重新执行js时，将window.<strong>INIT_STATE</strong> 作为initalState 挂载到redux中</li>
 </ol>
 <p>具体实现：</p>
-<pre><code>- 中间件：
-</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">export default (store) =&gt; (next) =&gt; (action) =&gt; &#123;</span><br><span class="line">    console.log(`==========$&#123;store.getState()&#125;============`);</span><br><span class="line">    next(action);</span><br><span class="line">    window.INIT_DATA = store.getState();</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<pre><code>- redux 挂载
-</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">const store = createStore(combineReducers(reducers), window.INIT_DATA, compose(</span><br><span class="line">    applyMiddleware(thunk, routing),</span><br></pre></td></tr></table></figure>
-<pre><code>- 触发prerendering时机
-</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">const fragment = document.createDocumentFragment();</span><br><span class="line">const scriptNode = document.createElement(&apos;script&apos;);</span><br><span class="line">scriptNode.type = &apos;text/javascript&apos;;</span><br><span class="line">scriptNode.text = `window.INIT_DATA = $&#123;JSON.stringify(this.props)&#125;`;</span><br><span class="line">scriptNode.text = `window.INIT_DATA = $&#123;JSON.stringify(window.INIT_DATA || &apos;&#123;&#125;&apos;)&#125;`;</span><br><span class="line">fragment.appendChild(scriptNode);</span><br><span class="line">document.getElementsByTagName(&apos;head&apos;)[0].appendChild(fragment);</span><br><span class="line">document.dispatchEvent(new Event(&apos;custom-render-trigger&apos;));</span><br></pre></td></tr></table></figure>
+<ul>
+<li>中间件：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">export default (store) =&gt; (next) =&gt; (action) =&gt; &#123;</span><br><span class="line">    console.log(`==========$&#123;store.getState()&#125;============`);</span><br><span class="line">    next(action);</span><br><span class="line">    window.INIT_DATA = store.getState();</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>redux 挂载</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">const store = createStore(combineReducers(reducers), window.INIT_DATA, compose(</span><br><span class="line">    applyMiddleware(thunk, routing),</span><br></pre></td></tr></table></figure>
+<ul>
+<li>触发prerendering时机</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">const fragment = document.createDocumentFragment();</span><br><span class="line">const scriptNode = document.createElement(&apos;script&apos;);</span><br><span class="line">scriptNode.type = &apos;text/javascript&apos;;</span><br><span class="line">scriptNode.text = `window.INIT_DATA = $&#123;JSON.stringify(this.props)&#125;`;</span><br><span class="line">scriptNode.text = `window.INIT_DATA = $&#123;JSON.stringify(window.INIT_DATA || &apos;&#123;&#125;&apos;)&#125;`;</span><br><span class="line">fragment.appendChild(scriptNode);</span><br><span class="line">document.getElementsByTagName(&apos;head&apos;)[0].appendChild(fragment);</span><br><span class="line">document.dispatchEvent(new Event(&apos;custom-render-trigger&apos;));</span><br></pre></td></tr></table></figure>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/13/Nodejs/预渲染/" data-id="cjn78a73800024d6y4eb7qcc5" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/13/Nodejs/预渲染/" data-id="cjn78fs4j00059c6yrslwxfq2" class="article-share-link">Share</a>
       
       
     </footer>
@@ -169,7 +175,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/07/Nodejs/Nginx初探/" data-id="cjn78a73300004d6ydqclaadd" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/07/Nodejs/Nginx初探/" data-id="cjn78fs4e00039c6yq2s30jep" class="article-share-link">Share</a>
       
       
     </footer>
@@ -213,7 +219,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/23/Nodejs/index/" data-id="cjn78a73500014d6ywkqnt17n" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/09/23/Nodejs/index/" data-id="cjn78fs4f00049c6y8e3l60lb" class="article-share-link">Share</a>
       
       
     </footer>
@@ -295,7 +301,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/02/Module语法和加载方式/" data-id="cjn787gup0001406ydpzn329r" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/09/02/Module语法和加载方式/" data-id="cjn78fs3g00009c6yd2ereqcd" class="article-share-link">Share</a>
       
       
     </footer>
@@ -331,7 +337,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/02/My-First-Post/" data-id="cjn787gv40003406yspor51z2" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/09/02/My-First-Post/" data-id="cjn78fs3l00019c6yt67hc68k" class="article-share-link">Share</a>
       
       
     </footer>
@@ -376,7 +382,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/29/hello-world/" data-id="cjn787gv90005406yo7n7ojcf" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/08/29/hello-world/" data-id="cjn78fs3z00029c6y26b8528l" class="article-share-link">Share</a>
       
       
     </footer>
