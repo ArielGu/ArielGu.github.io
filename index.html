@@ -90,8 +90,8 @@
 <p>此外本文主要介绍Prerendering，之后会单独介绍SSR ✌️</p>
 <p>Prerendering</p>
 <p>整体思路：</p>
-<pre><code>利用 Webpack 的第三方插件prerender-spa-plugin，在编译应用的过程中在特定的时间(或事件节点)生成静态页面，建立对应的索引路径。
-</code></pre><p>使用：</p>
+<p>   利用 Webpack 的第三方插件prerender-spa-plugin，在编译应用的过程中在特定的时间(或事件节点)生成静态页面，建立对应的索引路径。</p>
+<p>使用：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">const PrerenderSPAPlugin = require(&apos;prerender-spa-plugin&apos;);</span><br><span class="line">const Renderer = PrerenderSPAPlugin.PuppeteerRenderer;</span><br><span class="line"></span><br><span class="line">module.exports = &#123;</span><br><span class="line">    plugins: [</span><br><span class="line">        new PrerenderSPAPlugin(&#123;</span><br><span class="line">            staticDir: path.join(__dirname, &apos;dist&apos;),</span><br><span class="line">            routes: [ &apos;/&apos;, &apos;/about&apos;, &apos;/contact&apos; ],</span><br><span class="line">            renderer: </span><br><span class="line">                new Renderer(&#123;</span><br><span class="line">                    inject: &#123;</span><br><span class="line">                        foo: &apos;bar&apos;</span><br><span class="line">                    &#125;,</span><br><span class="line">                    renderAfterDocumentEvent: &apos;render-event&apos;</span><br><span class="line">                &#125;)</span><br><span class="line">            &#125;)</span><br><span class="line">        ])</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ul>
 <li><p>staticDir: 预渲染输出页面地址</p>
@@ -104,6 +104,7 @@
 </li>
 </ul>
 <pre><code>b.renderAfterDocumentEvent: 监听document.dispatchEvent 事件，决定什么时候开始渲染
+
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">document.dispatchEvent(new Event(&apos;render-event&apos;))</span><br></pre></td></tr></table></figure>
 </code></pre><p>实践过程</p>
 <p>因为日常的项目开发主要是基于React 框架，且没有介入Node 层，所以为了优化首屏渲染慢的问题，采用了Prerendering 预渲染的方法。下面总结下在项目应用中存在的问题</p>
@@ -134,7 +135,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/13/Nodejs/预渲染/" data-id="cjn78fs4j00059c6yrslwxfq2" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/13/Nodejs/预渲染/" data-id="cjn78k3010004ie6ytcoe3mtr" class="article-share-link">Share</a>
       
       
     </footer>
@@ -175,7 +176,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/07/Nodejs/Nginx初探/" data-id="cjn78fs4e00039c6yq2s30jep" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/07/Nodejs/Nginx初探/" data-id="cjn78k3000003ie6ylhvy27iu" class="article-share-link">Share</a>
       
       
     </footer>
@@ -219,7 +220,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/23/Nodejs/index/" data-id="cjn78fs4f00049c6y8e3l60lb" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/09/23/Nodejs/index/" data-id="cjn78k3050005ie6ydequqwyv" class="article-share-link">Share</a>
       
       
     </footer>
@@ -301,7 +302,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/02/Module语法和加载方式/" data-id="cjn78fs3g00009c6yd2ereqcd" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/09/02/Module语法和加载方式/" data-id="cjn78k2z70000ie6yul80mv4a" class="article-share-link">Share</a>
       
       
     </footer>
@@ -337,7 +338,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/02/My-First-Post/" data-id="cjn78fs3l00019c6yt67hc68k" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/09/02/My-First-Post/" data-id="cjn78k2zd0001ie6yikr6cmev" class="article-share-link">Share</a>
       
       
     </footer>
@@ -382,7 +383,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/29/hello-world/" data-id="cjn78fs3z00029c6y26b8528l" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/08/29/hello-world/" data-id="cjn78k2zj0002ie6yg17yqvbb" class="article-share-link">Share</a>
       
       
     </footer>
