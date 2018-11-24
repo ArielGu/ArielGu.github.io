@@ -1,0 +1,50 @@
+<!DOCTYPE html><html lang="en-us"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><title>理解Buffer | Hexo</title><meta name="description"><meta name="generator" content="Hexo"><meta name="author" content="John Doe"><meta name="keywords" content="sjaak van den berg, svdb, bitcoin, crypto, payment, integration, bitcoins, wordpress, betaling, webshop, front end, design, ontwerp, developer"><meta name="HandheldFriendly" content="True"><meta name="MobileOptimized" content="320"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1,user-scalable=0"><link rel="stylesheet" type="text/css" href="/styles/screen.css"><link rel="apple-touch-icon" sizes="57x57" href="/images/apple-touch-icon-57x57.png"><link rel="apple-touch-icon" sizes="60x60" href="/images/apple-touch-icon-60x60.png"><link rel="apple-touch-icon" sizes="72x72" href="/images/apple-touch-icon-72x72.png"><link rel="apple-touch-icon" sizes="76x76" href="/images/apple-touch-icon-76x76.png"><link rel="apple-touch-icon" sizes="114x114" href="/images/apple-touch-icon-114x114.png"><link rel="apple-touch-icon" sizes="120x120" href="/images/apple-touch-icon-120x120.png"><link rel="apple-touch-icon" sizes="144x144" href="/images/apple-touch-icon-144x144.png"><link rel="apple-touch-icon" sizes="152x152" href="/images/apple-touch-icon-152x152.png"><link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-180x180.png"><link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png"><link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png"><link rel="icon" type="image/png" sizes="160x160" href="/images/favicon-160x160.png"><link rel="icon" type="image/png" sizes="192x192" href="/images/favicon-192x192.png"><meta name="msapplication-TileColor" content="#121315"><meta name="msapplication-TileImage" content="/images/mstile-144x144.png"></head><body itemscope itemtype="https://schema.org/WebPage"><header itemscope itemtype="https://schema.org/WPHeader"><a href="/"><img src="/images/svdb.png" alt="Hexo" title="Hexo"></a><h1><a href="/" alt="Hexo" title="Hexo" itemprop="headline">Hexo</a></h1><p itemprop="description"></p><nav itemscope itemtype="https://schema.org/SiteNavigationElement"><ul><li itemprop="name"><a href="/" alt="Home" title="Home" itemprop="url">Home</a></li><li itemprop="name"><a href="/articles" alt="Articles" title="Articles" itemprop="url">Articles</a></li><li itemprop="name"><a href="/about" alt="About" title="About" itemprop="url">About</a></li></ul></nav><div class="space"></div></header><main itemscope itemtype="https://schema.org/Blog"><article class="full"><h1 itemprop="headline">理解Buffer</h1><span class="post-meta">Published on<time itemprop="datePublished" datetime="2018-11-24T08:31:58.000Z"> Saturday, November 24th 2018 at 16:31</time><br>Last updated on<time itemprop="dateModified" datetime="2018-11-24T08:31:58.000Z"> Saturday, November 24th 2018 at 17:55</time></span><h2 id="关于Buffer"><a href="#关于Buffer" class="headerlink" title="关于Buffer"></a>关于Buffer</h2><ol>
+<li><p>Buffer 是什么?</p>
+<ul>
+<li>Buffer 是一个像Array的对象，但其主要用于操作字节。</li>
+<li>Buffer 是典型的JavaScript 和 C++结合的模块（性能相关由C++实现，非性能由JavaScript实现）；</li>
+<li><p>Node 在进程启动时已经加载了Buffer 模块</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var str=&apos;Buffer 结构&apos;;</span><br><span class="line">var buf = Buffer.alloc(20, str);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<ol start="2">
+<li><p>Buffer 的应用场景有哪些？</p>
+<ul>
+<li><p>流 的暂存区</p>
+<p>  流是数据的集合（与数据、字符串类似），但是流的数据不能一次性获取到，数据也不会全部load    到内存中，因此流非常适合大数据处理以及断断续续返回chunk的外部源。流的生产者与消费者之间的速    度通常是不一致的，因此需要buffer来暂存一些数据。buffer大小通过highWaterMark参数指定，默    认情况下是16Kb。</p>
+</li>
+<li><p>存储需要占用大量内存的数据</p>
+<p>  Buffer 对象占用的内存空间是不计算在 Node.js 进程内存空间限制上的，所以可以用来存储大    对象，但是对象的大小还是有限制的。一般情况下32位系统大约是1G，64位系统大约是2G。</p>
+</li>
+</ul>
+</li>
+<li><p>Buffer 的使用？</p>
+<ul>
+<li><p>buffer转字符串</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">buffer.toString();</span><br><span class="line">Buffer.isEncoding(&apos;utf-8&apos;); //编码检查</span><br><span class="line">Buffer.isBuffer(new Buffer(&apos;a&apos;); //Buffer检查</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<pre><code>- buffer转JSON
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">const buf = Buffer.from([0x1, 0x2, 0x3, 0x4, 0x5]);</span><br><span class="line">console.log(buf.toJSON());    // &#123; type: &apos;Buffer&apos;, data: [ 1, 2, 3, 4, 5 ] &#125;</span><br></pre></td></tr></table></figure>
+
+
+- buffer 拼接
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">var fs = require(&apos;fs&apos;);</span><br><span class="line"></span><br><span class="line">var rs = fs.createReadStream(&apos;test.md&apos;,&#123;highWaterMark:11&#125;);</span><br><span class="line">var data = &apos;&apos;;</span><br><span class="line">rs.on(&apos;data&apos;,function(chunk)&#123;</span><br><span class="line">	data += chunk;</span><br><span class="line">&#125;);</span><br><span class="line">rs.on(&apos;end&apos;,function(chunk)&#123;</span><br><span class="line">	console.log(data);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+
+**1. data事件中获取的chunk对象即Buffer对象**
+
+**2. highWaterMark 可将文件可读流每次读取的Buffer长度限制为11**
+</code></pre><ol start="4">
+<li><p>Buffer 与性能</p>
+<p> Buffer 在文件I/O和网络I/O中运用广泛，在网络传输中需要转换为 Buffer，以二进制数据传输，可大大提高传输效率。</p>
+<p> 在实际应用中response 本身就是可写流，所以可将Buffer对象直接传输，例如</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">var helloworldStr = &apos;abc&apos;;</span><br><span class="line">var helloworld = new Buffer(helloworldStr);</span><br><span class="line">http.createServer(function(req,res)&#123;</span><br><span class="line">	res.writeHead(200);</span><br><span class="line">	res.end(helloworld);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></li>
+</ol>
+</article></main></body></html>
