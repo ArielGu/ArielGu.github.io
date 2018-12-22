@@ -1,0 +1,60 @@
+<!DOCTYPE html><html lang="en-us"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><title>Node-玩转进程 | Hexo</title><meta name="description"><meta name="generator" content="Hexo"><meta name="author" content="John Doe"><meta name="keywords" content="sjaak van den berg, svdb, bitcoin, crypto, payment, integration, bitcoins, wordpress, betaling, webshop, front end, design, ontwerp, developer"><meta name="HandheldFriendly" content="True"><meta name="MobileOptimized" content="320"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1,user-scalable=0"><link rel="stylesheet" type="text/css" href="/styles/screen.css"><link rel="apple-touch-icon" sizes="57x57" href="/images/apple-touch-icon-57x57.png"><link rel="apple-touch-icon" sizes="60x60" href="/images/apple-touch-icon-60x60.png"><link rel="apple-touch-icon" sizes="72x72" href="/images/apple-touch-icon-72x72.png"><link rel="apple-touch-icon" sizes="76x76" href="/images/apple-touch-icon-76x76.png"><link rel="apple-touch-icon" sizes="114x114" href="/images/apple-touch-icon-114x114.png"><link rel="apple-touch-icon" sizes="120x120" href="/images/apple-touch-icon-120x120.png"><link rel="apple-touch-icon" sizes="144x144" href="/images/apple-touch-icon-144x144.png"><link rel="apple-touch-icon" sizes="152x152" href="/images/apple-touch-icon-152x152.png"><link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-180x180.png"><link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png"><link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png"><link rel="icon" type="image/png" sizes="160x160" href="/images/favicon-160x160.png"><link rel="icon" type="image/png" sizes="192x192" href="/images/favicon-192x192.png"><meta name="msapplication-TileColor" content="#121315"><meta name="msapplication-TileImage" content="/images/mstile-144x144.png"></head><body itemscope itemtype="https://schema.org/WebPage"><header itemscope itemtype="https://schema.org/WPHeader"><a href="/"><img src="/images/svdb.png" alt="Hexo" title="Hexo"></a><h1><a href="/" alt="Hexo" title="Hexo" itemprop="headline">Hexo</a></h1><p itemprop="description"></p><nav itemscope itemtype="https://schema.org/SiteNavigationElement"><ul><li itemprop="name"><a href="/" alt="Home" title="Home" itemprop="url">Home</a></li><li itemprop="name"><a href="/articles" alt="Articles" title="Articles" itemprop="url">Articles</a></li><li itemprop="name"><a href="/about" alt="About" title="About" itemprop="url">About</a></li></ul></nav><div class="space"></div></header><main itemscope itemtype="https://schema.org/Blog"><article class="full"><h1 itemprop="headline">Node-玩转进程</h1><span class="post-meta">Published on<time itemprop="datePublished" datetime="2018-12-16T12:31:14.000Z"> Sunday, December 16th 2018 at 20:31</time><br>Last updated on<time itemprop="dateModified" datetime="2018-12-16T12:31:14.000Z"> Saturday, December 22nd 2018 at 21:38</time></span><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>Node 在实际开发中面临的两个问题：</p>
+<ol>
+<li>如何充分利用多核CPU服务器？</li>
+<li>如何保证进程的健壮性和稳定性？ - Node 执行在单线程上，一旦线程异常未被捕获，会引起整个进程崩溃。</li>
+</ol>
+<h2 id="解决方案演进"><a href="#解决方案演进" class="headerlink" title="解决方案演进"></a>解决方案演进</h2><p>####多进程架构</p>
+<p>每个进程使用一个CPU，以此实现多核CPU利用。 Node提供了child_process 模块，以及child_process.fork()函数供实现进程的复制。实例： Demo01</p>
+<p>work.js</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">const http = require(&apos;http&apos;);</span><br><span class="line">http.createServer((req,res)=&gt;&#123;</span><br><span class="line">  res.writeHead(200,&#123;&apos;Content-Type&apos;:&apos;text/plain&apos;&#125;);</span><br><span class="line">  res.end(&apos;Hello World\n&apos;);</span><br><span class="line">&#125;).listen(Math.round(1+Math.random())*1000,&apos;127.0.0.1&apos;);</span><br></pre></td></tr></table></figure>
+<p>Master.js</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">const fork = require(&apos;child_process&apos;).fork;</span><br><span class="line"></span><br><span class="line">const cpus = require(&apos;os&apos;).cpus();</span><br><span class="line">for(var i =0;i&lt;cpus.length;i++)&#123;</span><br><span class="line">  fork(&apos;./worker.js&apos;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li><p>如何创建子进程</p>
+<p> child_process 提供了四种方法：</p>
+<ul>
+<li>spawn() 启动一个子进程来执行命令</li>
+<li>exec() 启动一个子进程来执行命令。 与spawn 不同点：有回调函数获知子进程的状况</li>
+<li>execFile() 启动一个子进程来执行可执行文件。</li>
+<li><p>fork() 无spawn 不同点，只需指定执行的 Js 文件模块即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">const cp = require(&apos;child_process&apos;);</span><br><span class="line"></span><br><span class="line">cp.spawn(&apos;node&apos;,[&apos;worker.js&apos;]);</span><br><span class="line">cp.exec(&apos;node worker.js&apos;,(err,stdout,stderr)=&gt;&#123;&#125;);</span><br><span class="line">cp.execFile(&apos;worker.js&apos;,(err,stdout,stderr)=&gt;&#123;&#125;);</span><br><span class="line">cp.fork(&apos;./work.js&apos;);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<ol start="2">
+<li><p>进程间通信</p>
+<p> JavaScript 主线程和UI 渲染线程共用一个线程，相互阻塞。为了解决这个问题HTML5 提出了WebWorker API：允许创建工作线程在后台运行，不影响主线程和UI 渲染，通过onmessage() 和 postMessage() 进行通信。Node 中对应的实现如实例：Demo02</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">process.on(&apos;message&apos;,(m)=&gt;&#123;&#125;);</span><br><span class="line">process.send(&#123;foo:&apos;bar&apos;&#125;);</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<pre><code>父子进程之间会创建IPC(Inner-Process Communication, 即进程间通信），其目的是让不同进程能够互相访问资源并进行协调工作（有多种方式：管道、socket、信号量、共享内存、消息队列等），Node采用了管道技术
+</code></pre><ol start="3">
+<li><p>消息传递内容——句柄传递</p>
+<p> IPC 出来传递数据，还能传递句柄</p>
+<p> <strong>1）What?是什么？</strong></p>
+<p> 一种可以用来标识资源的引用，其内部可以包含指向对象的文件描述符。例如句柄可以用来标识一个服务器端socket 对象、一个客户端socket 对象、一个UDP套接字、一个管道等等</p>
+<p> <strong>2) How?怎么使用？</strong></p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">// parent.js</span><br><span class="line">const child = cp.fork(&apos;child.js&apos;);</span><br><span class="line">const server = require(&apos;net&apos;).createServer();</span><br><span class="line">server.on(&apos;connection&apos;,(socket)=&gt;&#123;</span><br><span class="line"> 		socket.end(&apos;handled by parent\n&apos;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">server.listen(1337,()=&gt;&#123;</span><br><span class="line"> 		child.send(&apos;server&apos;,server);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 句柄 child.js</span><br><span class="line">process.on(&apos;message&apos;,(m,server)=&gt;&#123;</span><br><span class="line"> 		if(m===&apos;server&apos;)&#123;</span><br><span class="line">   		server.on(&apos;connection&apos;,(socket)=&gt;&#123;</span><br><span class="line">     			socket.end(&apos;handled by child, pid is &apos;+process.pid);</span><br><span class="line">   		&#125;)</span><br><span class="line"> 		&#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<pre><code>现象：客户端发起请求可能被父进程或者子进程处理；
+处理方法：主进程将句柄发送给子进程后，关闭服务器的监听
+</code></pre><h3 id="集群之路"><a href="#集群之路" class="headerlink" title="集群之路"></a>集群之路</h3><p>父子进程之间的事件：error / exit / close / disconnect / kill 等，这些事件关联着父子进程，所以就需要在这些关系之间建立机制，搭建完整的多进程架构。</p>
+<ol>
+<li><p>自动重启</p>
+<p> 子进程关闭，重新启动一个工作进程来继续服务</p>
+<ul>
+<li>Condition1: 业务代码中有隐藏的bug导致工作进程退出，所以需要在工作进程中处理这种异常</li>
+<li>Condition2: 所有工作进程都停止接收新的连接，全处于等待退出的状态。但等到进程完全退出才重启过程中，没有进程接收用户服务</li>
+<li>Condition3: 等待长连接需要较久的时间，所以需要为连接的断开设置一个超时时间，限定之间里强制退出</li>
+<li>Condition4: 优化日志记录</li>
+<li>Condition5: 无限重启：如果启动的过程中发生错误，导致工作进程频繁重启，所以采用队列标记，判断是否重启过于频繁</li>
+</ul>
+</li>
+<li><p>负载均衡</p>
+<p> Node而言繁忙由CPU 和 I/O 两个部分构成，而影响抢占是CPU的繁忙度，所以可能出现I/O繁忙但是CPU空闲，造成进程间负载不均衡。Node在v0.11 中提供Round-in 轮叫调度的策略</p>
+</li>
+</ol>
+</article></main></body></html>
